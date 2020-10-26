@@ -1,0 +1,29 @@
+RESTART
+
+FIT_TO_TEMPLATE REFERENCE=step5_charmm2gmx-modified.pdb
+first: CENTER ATOMS=3006-3053       #  GTP
+second: CENTER ATOMS=2955-3005      #  FAR
+last: CENTER ATOMS=9733-33193:138   #  all P atoms in system--range with a stride 118
+gtp: DISTANCE ATOMS=first,last COMPONENTS
+far: DISTANCE ATOMS=second,last COMPONENTS
+
+# Activate metadynamics in phi and psi
+# depositing a Gaussian every 500 time steps,
+# with height equal to 1.2 kJoule/mol,
+# and width 0.35 rad for both CVs. 
+
+METAD ...
+LABEL=metad
+ARG=gtp.z,far.z
+PACE=500
+HEIGHT=1.2
+SIGMA=0.10,0.35
+FILE=HILLS2
+BIASFACTOR=5.0
+TEMP=310.0
+GRID_MIN=-15.0,-10.0
+GRID_MAX=15.0,10.0
+... METAD
+
+# monitor the two variables and the metadynamics bias potential
+PRINT STRIDE=200 ARG=gtp.z,far.z,metad.bias FILE=COLVAR2
