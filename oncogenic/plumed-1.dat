@@ -1,0 +1,28 @@
+RESTART
+
+FIT_TO_TEMPLATE REFERENCE=step5_charmm2gmx-modified.pdb
+first: CENTER ATOMS=2964-3014         #FAR
+second: CENTER ATOMS=3015-3062        #GTP
+last: CENTER ATOMS=9742-33202:138     #all P atoms in system--range with a stride 118
+
+far: DISTANCE ATOMS=first,last COMPONENTS        #distance between FAR and center of membrane
+gtp: DISTANCE ATOMS=second,last COMPONENTS        #distance between GTP and center of membrane
+
+# depositing a Gaussian every 500 time steps,
+# with height equal to 1.0 kJoule/mol,
+# and width 0.35 rad for both CVs. 
+
+METAD ...
+LABEL=metad
+ARG=gtp.z,far.z
+PACE=500
+HEIGHT=2.0
+SIGMA=0.10,0.35
+FILE=HILLS1
+BIASFACTOR=10.0
+TEMP=310.0
+GRID_MIN=-16.0,-16.0
+GRID_MAX=16.0,16.0
+... METAD
+
+PRINT STRIDE=200 ARG=gtp.z,far.z,metad.bias FILE=COLVAR1
