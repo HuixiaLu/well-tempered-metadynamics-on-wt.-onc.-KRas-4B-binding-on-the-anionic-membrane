@@ -1,6 +1,6 @@
 RESTART
 
-FIT_TO_TEMPLATE REFERENCE=step5_charmm2gmx-modified.pdb
+FIT_TO_TEMPLATE REFERENCE=step5_charmm2gmx-modified-1.pdb
 first: CENTER ATOMS=2964-3014         #FAR
 second: CENTER ATOMS=3015-3062        #GTP
 last: CENTER ATOMS=9742-33202:138     #all P atoms in system--range with a stride 118
